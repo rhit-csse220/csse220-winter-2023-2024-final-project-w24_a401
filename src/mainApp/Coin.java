@@ -1,5 +1,5 @@
 package mainApp;
 
-public class Coins {
+public class Coin {
 
 }
