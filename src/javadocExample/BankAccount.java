@@ -1,6 +1,7 @@
 package javadocExample;
 /**
  * Class: BankAccount
+ hello :)
  * @author CSSE Faculty
  * <br>Purpose: Used to hold account information (account name, balance)
  * <br>Restrictions: Cannot be used for checking accounts
