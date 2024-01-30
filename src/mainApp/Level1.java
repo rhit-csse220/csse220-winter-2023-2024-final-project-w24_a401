@@ -7,17 +7,13 @@ import java.util.Scanner;
 
 
 
-public class Levels {
-
-	
-	
-	
+public class Level1 {
 	
 	private void readFile(String fileName) {
 		Scanner scanner = null;
 		File level1 = null;
 		try {
-			level1 = new File(fileName);
+			level1 = new File("src/level1.txt");
 			scanner = new Scanner(level1);
 		}catch(FileNotFoundException e) {
 			System.out.println(e.getMessage());
@@ -25,6 +21,7 @@ public class Levels {
 			System.out.println("Folder searched for the file not found: " + parentFolder.getAbsolutePath());
 			System.exit(1);
 		}
+		
 		String title = scanner.nextLine();
 		System.out.println("Title: " + title);
 		while (scanner.hasNextLine()) {
@@ -36,28 +33,15 @@ public class Levels {
 }
 	
 
-
-
-	private void writeFile(String outputFilename) {
-		PrintWriter pw = null;
-		try {
-			pw = new PrintWriter(outputFilename);
-		} catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-			System.exit(1);
-		}}
 	public void runApp() {
 		String filename = "level1.txt";
-		writeFile(filename);
 		readFile(filename);
 	} 
 	public static void main(String[] args) {
-		Levels app = new Levels();
+		Level1 app = new Level1();
 		app.runApp();
 	}}
 	
-
 
 
 
