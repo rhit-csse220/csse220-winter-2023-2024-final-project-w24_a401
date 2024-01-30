@@ -40,6 +40,10 @@ public class MainApp {
         
         JComponent heroComponent = new HeroComponent();
         frame.add(heroComponent);
+        
+        
+        
+        
         frame.setVisible(true);
 		
 	} // main
