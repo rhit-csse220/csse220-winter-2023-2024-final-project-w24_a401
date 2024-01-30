@@ -1,0 +1,11 @@
+coin
+wall
+coin
+electrified barrier
+electrified barrier
+coin
+wall
+electrified barrier
+coin
+wall
+coin

@@ -1,0 +1,15 @@
+coin
+wall
+electrified barrier
+coin
+missile
+coin
+electrified barrier
+wall
+coin
+wall
+tracking missile
+electrified barrier
+coin
+wall
+coin
