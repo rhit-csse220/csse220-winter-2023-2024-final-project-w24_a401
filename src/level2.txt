@@ -6,7 +6,7 @@ missile
 coin
 electrified barrier
 wall
-coin
+oscillating coin
 wall
 tracking missile
 electrified barrier
