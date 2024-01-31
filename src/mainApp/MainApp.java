@@ -1,5 +1,12 @@
 package mainApp;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Timer;
+
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
@@ -12,40 +19,57 @@ import javax.swing.JFrame;
  * <br>Purpose: Top level class for CSSE220 Project containing main method 
  * <br>Restrictions: None
  */
+import javax.swing.*;
+
+
 public class MainApp {
-	
-	
-	private void runApp() {
-		System.out.println("Write your cool arcade game here!!");		
-	} // runApp
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+        	final int frameWidth = 1000;
+            final int frameHeight = 600;
+            final int frameXLoc = 100;
+            final int frameYLoc = 100;
+  
+            // Creating the JFrame
+            JFrame frame = new JFrame();
+            frame.setSize(frameWidth, frameHeight);
+            frame.setLocation(frameXLoc, frameYLoc);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	/**
-	 * ensures: runs the application
-	 * @param args unused
-	 */
-	public static void main(String[] args) {
-		MainApp mainApp = new MainApp();
-		mainApp.runApp();
-		
-        final int frameWidth = 1000;
-        final int frameHeight = 600;
-        final int frameXLoc = 100;
-        final int frameYLoc = 100;
+            Hero hero = new Hero(0, 400, 2);
+            HeroComponent heroComponent = new HeroComponent(hero);
+            frame.add(heroComponent);
 
-        // Creating the JFrame
-        JFrame frame = new JFrame();
-        frame.setSize(frameWidth, frameHeight);
-        frame.setLocation(frameXLoc, frameYLoc);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        JComponent heroComponent = new HeroComponent();
-        frame.add(heroComponent);
-        
-        
-        
-        
-        frame.setVisible(true);
-		
-	} // main
+            GameAdvanceListener gameAdvanceListener = new GameAdvanceListener(hero, heroComponent);
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(gameAdvanceListener, 0, 10); // Schedule the task to run every 10 milliseconds
 
+            frame.addKeyListener(new KeyAdapter(){
+            	@Override
+            	public void keyPressed(KeyEvent e) {
+            		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+            			System.out.println("Space Bar Pressed");
+            			hero.setYPosition(-100);
+  
+            			heroComponent.repaint();
+            		}
+            	}
+            	
+            	public void keyReleased(KeyEvent e) {
+            		if(e.getKeyCode() == KeyEvent.VK_SPACE){
+            			hero.setYPosition(100);
+            			heroComponent.repaint();
+        	
+        }
+            	}
+            });
+            
+            
+            
+            frame.setVisible(true);
+        });
+    }
 }
+
+
+
