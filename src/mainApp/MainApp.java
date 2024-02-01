@@ -50,7 +50,6 @@ public class MainApp {
             		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             			System.out.println("Space Bar Pressed");
             			hero.setYPosition(-100);
-  
             			heroComponent.repaint();
             		}
             	}
@@ -58,6 +57,7 @@ public class MainApp {
             	public void keyReleased(KeyEvent e) {
             		if(e.getKeyCode() == KeyEvent.VK_SPACE){
             			hero.setYPosition(100);
+            			System.out.println("Space Bar Released");
             			heroComponent.repaint();
         	
         }
