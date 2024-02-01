@@ -1,13 +1,16 @@
 package mainApp;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
 public class Level {
 
     protected Set<String> allowedWords = new HashSet<>();
+    protected List<String> levelComponent = new ArrayList<>();
 
     public Level() {
         allowedWords.add("wall");
@@ -36,10 +39,10 @@ public class Level {
 
         // Reset the scanner to the beginning of the file
         try (Scanner scanner = new Scanner(levelFile)) {
-            // Read and print each line
+            // Read and add each line
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                System.out.println(line);
+                levelComponent.add(line);
             }
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());

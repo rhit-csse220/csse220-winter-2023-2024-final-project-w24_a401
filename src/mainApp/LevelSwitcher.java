@@ -10,8 +10,8 @@ public class LevelSwitcher extends JFrame implements KeyListener {
     public LevelSwitcher(Level initialLevel) {
         this.currentLevel = initialLevel;
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setSize(400, 300);
         addKeyListener(this);
         setFocusable(true);
         requestFocus();

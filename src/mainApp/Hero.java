@@ -31,7 +31,7 @@ public class Hero {
     public void move() {
         this.x += this.moveX;
         if (this.x > 900) {
-            this.x = 0;
+            this.x = 900;
  //           this.moveX = -this.moveX; // Reverse direction when hitting left edge
         }
 //        } else if (x > 1000) { // Assuming width of the screen is 400
@@ -43,7 +43,7 @@ public class Hero {
     public void setYPosition(int changeY) {
     	this.y += changeY;
     	if(this.y < 0) {
-    		this.y = 500;
+    		this.y = 0;
     		
     	}
     }

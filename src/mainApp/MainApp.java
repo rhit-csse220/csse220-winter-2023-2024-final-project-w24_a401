@@ -31,6 +31,7 @@ public class MainApp {
             final int frameYLoc = 100;
   
             // Creating the JFrame
+          
             JFrame frame = new JFrame();
             frame.setSize(frameWidth, frameHeight);
             frame.setLocation(frameXLoc, frameYLoc);
@@ -39,6 +40,16 @@ public class MainApp {
             Hero hero = new Hero(0, 400, 2);
             HeroComponent heroComponent = new HeroComponent(hero);
             frame.add(heroComponent);
+            
+//            Coin coin = new Coin(200, 100);
+//            CoinComponent coinComponent = new CoinComponent(coin);
+//            frame.add(coinComponent);
+//            
+//            Wall wall = new Wall(100, 100);
+//            WallComponent wallComponent = new WallComponent(wall);
+//            frame.add(wallComponent);
+            
+            		
 
             GameAdvanceListener gameAdvanceListener = new GameAdvanceListener(hero, heroComponent);
             Timer timer = new Timer();
