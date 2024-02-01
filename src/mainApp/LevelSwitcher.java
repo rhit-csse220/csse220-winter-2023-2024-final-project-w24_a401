@@ -21,13 +21,12 @@ public class LevelSwitcher extends JFrame implements KeyListener {
 
     private void switchLevel(Level newLevel) {
         currentLevel = newLevel;
-        System.out.println("Switching to level: " + currentLevel.getClass().getSimpleName());
+        System.out.println(currentLevel.getClass().getSimpleName());
         currentLevel.runApp();
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        // Not needed for this example
     }
 
     @Override
@@ -41,7 +40,6 @@ public class LevelSwitcher extends JFrame implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // Not needed for this example
     }
 
     public static void main(String[] args) {
