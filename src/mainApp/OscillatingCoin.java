@@ -1,5 +1,9 @@
 package mainApp;
 
-public class OscillatingCoin {
+public class OscillatingCoin extends Coin {
+	
+	public static void moveCoin(){
+		
+	}
 
 }

@@ -1,5 +1,9 @@
 package mainApp;
 
-public class Coin {
+public class Coin extends Obstacle {
+	
+	public static void addScore(){
+		
+	}
 
 }

@@ -1,5 +1,5 @@
 package mainApp;
 
-public class Wall {
+public class Wall extends Obstacle {
 
 }
