@@ -20,6 +20,7 @@ public class GameComponent extends JComponent{
 	GameComponent(int x, int y){
 		this.xPos = x;
 		this.yPos = y;
+		//hello
 	}
 	
 	
