@@ -40,9 +40,7 @@ public class MainApp {
             Hero hero = new Hero(0, 400, 2);
             HeroComponent heroComponent = new HeroComponent(hero);
             frame.add(heroComponent);
-            
-            
-            		
+            	
 
             GameAdvanceListener gameAdvanceListener = new GameAdvanceListener(hero, heroComponent);
             Timer timer = new Timer();
