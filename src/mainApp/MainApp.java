@@ -41,13 +41,6 @@ public class MainApp {
             HeroComponent heroComponent = new HeroComponent(hero);
             frame.add(heroComponent);
             
-//            Coin coin = new Coin(200, 100);
-//            CoinComponent coinComponent = new CoinComponent(coin);
-//            frame.add(coinComponent);
-//            
-//            Wall wall = new Wall(100, 100);
-//            WallComponent wallComponent = new WallComponent(wall);
-//            frame.add(wallComponent);
             
             		
 
@@ -74,6 +67,7 @@ public class MainApp {
         }
             	}
             });
+            
             
             
             

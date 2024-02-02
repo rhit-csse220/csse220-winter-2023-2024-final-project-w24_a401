@@ -10,7 +10,7 @@ import java.util.Set;
 public class Level {
 
     protected Set<String> allowedWords = new HashSet<>();
-    protected List<String> levelComponent = new ArrayList<>();
+    protected List<GameComponent> levelComponents = new ArrayList<>();
 
     public Level() {
         allowedWords.add("wall");
@@ -42,7 +42,15 @@ public class Level {
             // Read and add each line
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                levelComponent.add(line);
+                String[] components = line.split(",");
+                if (components.length == 3) {
+                    String type = components[0].trim();
+                    int x = Integer.parseInt(components[1].trim());
+                    int y = Integer.parseInt(components[2].trim());
+
+                    GameComponent gameComponent = createGameComponent(type, x, y);
+                    levelComponents.add(gameComponent);
+                }
             }
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
@@ -62,13 +70,33 @@ public class Level {
         return true;
     }
 
+    private GameComponent createGameComponent(String type, int x, int y) {
+        switch (type) {
+            case "c":
+                return new Coin(x, y);
+            case "o":
+                return new OscillatingCoin(x, y);
+            case "w":
+                return new Wall(x, y);
+            case "e":
+                return new ElectrifiedBarrier(x, y);
+            case "m":
+                return new Missile(x, y);
+            case "t":
+                return new TrackingMissile(x, y);
+            default:
+                throw new IllegalArgumentException("Invalid game component type: " + type);
+        }
+    }
+
     public void runApp() {
         String filename = getLevelFileName();
         readFile(filename);
+        // Now you can use the levelComponents list in your game
     }
 
-    // This method should be implemented by each specific level
     protected String getLevelFileName() {
-        return ""; // Override this method in each specific level class
+        // Return the appropriate file name for the level
+        return "";
     }
 }
