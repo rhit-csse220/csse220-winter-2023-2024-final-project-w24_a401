@@ -9,11 +9,13 @@ public class Obstacle {
 	int xpos;
 	int ypos;
 	
-	public static void draw(){
+	public static void draw() {
 		
 	}
 
 	public static void getObstaclePosition(){
 		
 	}
+
+	
 }

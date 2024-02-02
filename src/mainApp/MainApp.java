@@ -38,6 +38,9 @@ public class MainApp {
 
             Hero hero = new Hero(0, 400, 2);
             HeroComponent heroComponent = new HeroComponent(hero);
+            
+            GameComponent gameComponent = new GameComponent(hero.getX(), hero.getY());
+            
             frame.add(heroComponent);
 
             GameAdvanceListener gameAdvanceListener = new GameAdvanceListener(hero, heroComponent);
@@ -53,6 +56,7 @@ public class MainApp {
             			heroComponent.repaint();
             		}
             	}
+            	
             	
             	public void keyReleased(KeyEvent e) {
             		if(e.getKeyCode() == KeyEvent.VK_SPACE){
