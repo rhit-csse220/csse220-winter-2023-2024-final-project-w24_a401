@@ -2,35 +2,32 @@ package mainApp;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Random;
 
-public class Wall extends GameComponent {
-	
+class Wall {
     private int x;
     private int y;
-	
-    public Wall(int x, int y) {
-    	super(x,y);
-    }
-    
-	public int getX() {
-		return this.x;
-	}
+    private final int speed;
+    private final int screenWidth;
+    private final int screenHeight;
 
-	public int getY() {
-		return this.y;
-	}
-	
-    @Override
-    public void render(Graphics2D g2d) {
-        // Implement rendering logic for Coin
-        g2d.setColor(Color.GRAY);
-        g2d.fillRect(x, y, 50, 100);
+    public Wall(int speed, int screenWidth, int screenHeight) {
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+        this.x = screenWidth; // Start from the right side
+        this.y = new Random().nextInt(screenHeight); // Random y position within the screen height
+        this.speed = speed;
     }
 
-    @Override
-    public void update() {
-        // Implement update logic for Coin
-        // For example, check for collisions, movement, etc.
+    public int getX() {
+        return x;
     }
 
+    public int getY() {
+        return y;
+    }
+
+    public void move() {
+        x -= speed; // Move towards the left
+    }
 }
