@@ -1,44 +1,52 @@
 package mainApp;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.Timer;
+import java.util.List;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 
-
-//hi!!
 /**
  * Class: MainApp
  * @author Team w24_a401
  * <br>Purpose: Top level class for CSSE220 Project containing main method 
  * <br>Restrictions: None
  */
-import javax.swing.*;
 
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainApp {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Game");
-        GameComponent gameComponent = new GameComponent();
-        frame.add(gameComponent);
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        gameComponent.startGame();
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Game");
+            GameComponent gameComponent = new GameComponent();
+            frame.add(gameComponent);
+            frame.pack();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+
+            // Create and use the Level class
+            Level level = new Level();
+
+            // Main game loop
+            while (level.hasMoreLevels()) {
+                // Load the next level
+                level.loadNextLevel();
+
+                // Get the components for the current level
+                List<GameComponent> components = level.getLevelComponents();
+
+                // Set the components to your GameComponent
+                gameComponent.addInitialComponents(components);
+
+                // Start the game
+                gameComponent.startGame();
+
+                // Wait for the level to finish
+
+                // Move to the next level
+                level.nextLevel();
+            }
+        });
     }
 }

@@ -8,14 +8,20 @@ import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.JPanel;
 
-class GameComponent extends JPanel {
-    private static final int WIDTH = 800;
+public class GameComponent extends JPanel {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static final int WIDTH = 800;
     static final int HEIGHT = 600;
     private static final int HERO_WIDTH = 50;
     protected static final int HERO_HEIGHT = 50;
@@ -26,20 +32,37 @@ class GameComponent extends JPanel {
     protected static final int COIN_SPEED = 3;
 
     private Hero hero;
-    private ArrayList<Wall> walls;
-    private ArrayList<Coin> coins;
+//    private ArrayList<Wall> walls;
+//    private ArrayList<Coin> coins;
+//    private ArrayList<Missile> missiles;
+//    private ArrayList<TrackingMissile> tmissiles;
+//    private ArrayList<ElectrifiedBarrier> ebarriers;
+//    private ArrayList<OscillatingCoin> ocoins;
+    
+    private CopyOnWriteArrayList<Wall> walls = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Coin> coins = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Missile> missiles = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<TrackingMissile> tmissiles = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<ElectrifiedBarrier> ebarriers = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<OscillatingCoin> ocoins = new CopyOnWriteArrayList<>();
+    
     private Timer timer;
 
     private boolean upKeyPressed;
+    private Level currentLevel;
 
     public GameComponent() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.WHITE);
 
-        hero = new Hero(WIDTH / 2 - HERO_WIDTH / 2, HEIGHT - HERO_HEIGHT - 20, 20, 20);
-
-        walls = new ArrayList<>();
-        coins = new ArrayList<>();
+        hero = new Hero(0, HEIGHT - HERO_HEIGHT, HERO_SPEED, 20);
+        
+//        walls = new ArrayList<>();
+//        coins = new ArrayList<>();
+//        missiles = new ArrayList<>();
+//        tmissiles = new ArrayList<>();
+//        ebarriers = new ArrayList<>();
+//        ocoins = new ArrayList<>();
 
         timer = new Timer();
         upKeyPressed = false;
@@ -51,7 +74,14 @@ class GameComponent extends JPanel {
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
                     upKeyPressed = true;
                 }
+//                if (e.getKeyChar() == 'U' || e.getKeyChar() == 'u') {
+//                	currentLevel.nextLevel();
+//                }
+//                if (e.getKeyChar() == 'D' || e.getKeyChar() == 'd') {
+//                	currentLevel.previousLevel();
+//                }
             }
+           
 
             @Override
             public void keyReleased(KeyEvent e) {
@@ -59,7 +89,25 @@ class GameComponent extends JPanel {
                     upKeyPressed = false;
                 }
             }
-        });
+        });}
+    
+        
+    public void addInitialComponents(List<GameComponent> initialComponents) {
+        for (GameComponent component : initialComponents) {
+            if (component instanceof Wall) {
+                walls.add((Wall) component);
+            } else if (component instanceof Coin) {
+                coins.add((Coin) component);
+            } else if (component instanceof Missile) {
+                missiles.add((Missile) component);
+            } else if (component instanceof TrackingMissile) {
+                tmissiles.add((TrackingMissile) component);
+            } else if (component instanceof ElectrifiedBarrier) {
+                ebarriers.add((ElectrifiedBarrier) component);
+            } else if (component instanceof OscillatingCoin) {
+                ocoins.add((OscillatingCoin) component);
+            }
+        }
     }
 
     public void startGame() {
@@ -82,9 +130,10 @@ class GameComponent extends JPanel {
         g2d.fillRect(hero.getX(), hero.getY(), HERO_WIDTH, HERO_HEIGHT);
 
         // Draw walls
-        g2d.setColor(Color.RED);
+        g2d.setColor(Color.GRAY);
         for (Wall wall : walls) {
-            g2d.fillRect(wall.getX(), wall.getY(), WALL_WIDTH, HEIGHT - wall.getY());
+            g2d.fillRect(wall.getX(), wall.getY(), WALL_WIDTH, 10);
+            wall.move();
         }
 
         // Draw coins
@@ -92,6 +141,34 @@ class GameComponent extends JPanel {
         for (Coin coin : coins) {
             g2d.fillOval(coin.getX(), coin.getY(), COIN_SIZE, COIN_SIZE);
         }
+        
+        // Draw missiles
+        g2d.setColor(Color.BLACK);
+        for (Missile missile: missiles) {
+        	g2d.fillRect(missile.getX(), missile.getY(), 30, 10);
+        	missile.move();
+        }
+        
+        // Draw tracking missiles
+        g2d.setColor(Color.RED);
+        for (TrackingMissile trackingmissile: tmissiles) {
+        	g2d.fillRect(trackingmissile.getX(), trackingmissile.getY(), 30, 10);
+        	trackingmissile.moveMissile();
+        }
+        
+        // Draw electrified barriers
+        g2d.setColor(Color.CYAN);
+        for (ElectrifiedBarrier electrifiedbarrier: ebarriers) {
+        	g2d.fillRect(electrifiedbarrier.getX(), electrifiedbarrier.getY(), WALL_WIDTH, 10);
+        	electrifiedbarrier.move();
+        }
+        
+        // Draw oscillating coins
+        g2d.setColor(Color.YELLOW);
+        for (OscillatingCoin oscillatingcoin : ocoins) {
+            g2d.fillOval(oscillatingcoin.getX(), oscillatingcoin.getY(), COIN_SIZE, COIN_SIZE);
+        }
+        
     }
 
     private void update() {
@@ -119,7 +196,7 @@ class GameComponent extends JPanel {
         Random rand = new Random();
         if (rand.nextInt(100) < 5) {
             int x = rand.nextInt(WIDTH - WALL_WIDTH);
-            walls.add(new Wall(WALL_SPEED, x, x));
+            walls.add(new Wall(WALL_SPEED, getWidth(), getHeight()));
         }
 
         for (int i = 0; i < walls.size(); i++) {
@@ -154,7 +231,7 @@ class GameComponent extends JPanel {
 
         // Check collisions with walls
         for (Wall wall : walls) {
-            Rectangle wallRect = new Rectangle(wall.getX(), wall.getY(), WALL_WIDTH, HEIGHT - wall.getY());
+            Rectangle wallRect = new Rectangle(wall.getX(), wall.getY(), WALL_WIDTH, 10);
             if (heroRect.intersects(wallRect)) {
    
             	

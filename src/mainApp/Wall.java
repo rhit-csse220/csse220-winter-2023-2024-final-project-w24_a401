@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Random;
 
-class Wall {
+class Wall extends GameComponent {
     private int x;
     private int y;
     private final int speed;
@@ -12,6 +12,7 @@ class Wall {
     private final int screenHeight;
 
     public Wall(int speed, int screenWidth, int screenHeight) {
+        
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         this.x = screenWidth; // Start from the right side
@@ -29,5 +30,8 @@ class Wall {
 
     public void move() {
         x -= speed; // Move towards the left
+        if (x <= 0) {
+            x = screenWidth; // Wrap to the right side
+        }
     }
 }
