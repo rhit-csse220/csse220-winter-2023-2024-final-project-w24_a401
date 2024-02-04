@@ -7,48 +7,47 @@ import java.awt.Shape;
 import java.awt.event.KeyEvent;
 
 
-public class Hero {
+class Hero {
     private int x;
     private int y;
-    private int moveX;
-    private int moveY;
-    private boolean jumpKeyPressed = false;
+    private final int speed;
+    private final int height;
+    private int lives;
+    private int coinCount;
 
-    public Hero(int x, int y, int changeX) {
+    public Hero(int x, int y, int speed, int height) {
         this.x = x;
         this.y = y;
-        this.moveX = changeX;
+        this.speed = speed;
+        this.height = height;
     }
+
     public int getX() {
-    	return this.x;
- 
+        return this.x;
     }
-    
+
     public int getY() {
-    	return this.y;
+        return this.y;
+    }
+    
+    public int getLives() {
+    	return this.lives;
     }
 
-    public void move() {
-        this.x += this.moveX;
-        if (this.x > 900) {
-            this.x = 0;
- //           this.moveX = -this.moveX; // Reverse direction when hitting left edge
+    public int getCoinCount() {
+    	return this.coinCount;
+    }
+    public void moveUp() {
+        y -= speed;
+        if (y < 0) {
+            y = 0;
         }
-//        } else if (x > 1000) { // Assuming width of the screen is 400
-//            this.x = 1000;
-//            this.moveX = -this.moveX; // Reverse direction when hitting right edge
-//        }
     }
 
-    public void setYPosition(int changeY) {
-    	this.y += changeY;
-    	if(this.y < 0) {
-    		this.y = 500;
-    		
-    	}
+    public void moveDown() {
+        y += speed;
+        if (y + height > GameComponent.HEIGHT) {
+            y = GameComponent.HEIGHT - height;
+        }
     }
-    
-    
 }
-
-
