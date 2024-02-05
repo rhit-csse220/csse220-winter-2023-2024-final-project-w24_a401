@@ -27,17 +27,11 @@ public class GameComponent extends JPanel {
     protected static final int HERO_HEIGHT = 50;
     protected static final int WALL_WIDTH = 20;
     protected static final int COIN_SIZE = 20;
-    protected static final int HERO_SPEED = 5;
+    protected static final int HERO_SPEED = 3;
     protected static final int WALL_SPEED = 3;
     protected static final int COIN_SPEED = 3;
 
     private Hero hero;
-//    private ArrayList<Wall> walls;
-//    private ArrayList<Coin> coins;
-//    private ArrayList<Missile> missiles;
-//    private ArrayList<TrackingMissile> tmissiles;
-//    private ArrayList<ElectrifiedBarrier> ebarriers;
-//    private ArrayList<OscillatingCoin> ocoins;
     
     private CopyOnWriteArrayList<Wall> walls = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Coin> coins = new CopyOnWriteArrayList<>();
@@ -56,7 +50,7 @@ public class GameComponent extends JPanel {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.WHITE);
 
-        hero = new Hero(0, HEIGHT - HERO_HEIGHT, HERO_SPEED, 20);
+        hero = new Hero(10, HEIGHT - HERO_HEIGHT, HERO_SPEED, 51);
         
 //        walls = new ArrayList<>();
 //        coins = new ArrayList<>();
