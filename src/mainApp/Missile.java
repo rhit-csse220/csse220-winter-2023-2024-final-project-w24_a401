@@ -15,7 +15,7 @@ public class Missile extends GameComponent {
     }
 
     public void move() {
-        this.x -= 10; // Move towards the left
+        this.x -= 5; // Move towards the left
         if (x <= 0) {
             x = 800;
         } // Wrap to the right side

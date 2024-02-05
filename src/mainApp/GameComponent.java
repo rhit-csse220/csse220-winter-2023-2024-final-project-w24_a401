@@ -43,10 +43,12 @@ public class GameComponent extends JPanel {
     private Timer timer;
 
     private boolean upKeyPressed;
+
     private Level currentLevel;
     
     private boolean diagonalForwardKeyPressed;
     private boolean diagonalDownKeyPressed;
+
 
     public GameComponent() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -73,7 +75,12 @@ public class GameComponent extends JPanel {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+
                 handleKeyPress(e);
+
+
+                handleKeyPress(e);
+
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
                     upKeyPressed = true;
                 }else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -81,11 +88,13 @@ public class GameComponent extends JPanel {
                 }else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
                 	diagonalDownKeyPressed = true;
                 }
+
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 handleKeyRelease(e);
+
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
                     upKeyPressed = false;
                 }else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
