@@ -16,7 +16,11 @@ public class TrackingMissile extends Missile {
     }
 
     public void moveMissile() {
-        super.move();
+        this.x -= 10; // Move towards the left
+        if (x <= 0) {
+            x = 800;
+        } // Wrap to the right side
+        
         if (hero.getY() > this.y) {
             this.y += 2;
         } else if (hero.getY() < this.y) {
