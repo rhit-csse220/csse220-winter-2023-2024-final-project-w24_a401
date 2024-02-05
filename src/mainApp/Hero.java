@@ -35,6 +35,11 @@ class Hero {
     public int getCoinCount() {
     	return this.coinCount;
     }
+    
+    public void addCoin() {
+    	this.coinCount+=1;
+    }
+    
     public void moveUp() {
         y -= speed;
         if (y < 0) {
