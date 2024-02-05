@@ -43,12 +43,18 @@ public class GameComponent extends JPanel {
     private Timer timer;
 
     private boolean upKeyPressed;
+
     private Level currentLevel;
     
+
+    private boolean diagonalForwardKeyPressed;
+    private boolean diagonalDownKeyPressed;
+
 
     public GameComponent() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.WHITE);
+
 
         hero = new Hero(10, HEIGHT - HERO_HEIGHT, HERO_SPEED, 51);
         
@@ -59,6 +65,9 @@ public class GameComponent extends JPanel {
 //        ebarriers = new ArrayList<>();
 //        ocoins = new ArrayList<>();
 
+        hero = new Hero(10, HEIGHT - HERO_HEIGHT - 20, 3, 51);
+
+
         timer = new Timer();
         upKeyPressed = false;
         currentLevel = new Level();
@@ -67,13 +76,33 @@ public class GameComponent extends JPanel {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+
                 handleKeyPress(e);
+
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    upKeyPressed = true;
+                }else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                	diagonalForwardKeyPressed = true;
+                }else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                	diagonalDownKeyPressed = true;
+                }
+
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 handleKeyRelease(e);
+
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    upKeyPressed = false;
+                }else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                	diagonalForwardKeyPressed = false;
+                }else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                	diagonalDownKeyPressed = false;
+                }
             }
+            
+            
         });
     }
 
@@ -143,6 +172,7 @@ public class GameComponent extends JPanel {
         for (Wall wall : walls) {
             g2d.fillRect(wall.getX(), wall.getY(), WALL_WIDTH, 10);
             wall.move();
+            g2d.fillRect(wall.getX(), wall.getY(), WALL_WIDTH, 20);
         }
 
         // Draw coins
@@ -219,6 +249,20 @@ public class GameComponent extends JPanel {
             hero.moveUp();
         } else {
             hero.moveDown();
+        }
+        
+        if(diagonalForwardKeyPressed) {
+        	hero.moveDiagonallyForwardDown();
+        }
+        if(diagonalForwardKeyPressed && upKeyPressed) {
+        	hero.moveDiagonallyForwardUp();
+        }
+        if(diagonalDownKeyPressed) {
+        	hero.moveDiagonallyBackDown();
+        }
+        
+        if(diagonalDownKeyPressed && upKeyPressed) {
+        	hero.moveDiagonallyBackUp();
         }
 
         // Move walls
@@ -356,9 +400,10 @@ public class GameComponent extends JPanel {
             Rectangle wallRect = new Rectangle(wall.getX(), wall.getY(), WALL_WIDTH, 10);
             if (heroRect.intersects(wallRect)) {
    
+            	System.out.println("Collides");
             	
-                // Handle collision with wall
-                // For now, let's just stop the game
+                // handle collision with wall
+                // stops game right now but will later implement lose life method
                 timer.cancel();
             }
         }
