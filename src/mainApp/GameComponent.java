@@ -369,6 +369,7 @@ public class GameComponent extends JPanel {
             Rectangle coinRect = new Rectangle(coin.getX(), coin.getY(), COIN_SIZE, COIN_SIZE);
             if (heroRect.intersects(coinRect)) {
                 coins.remove(i);
+                hero.addCoin();
                 // Handle collision with coin (e.g., increase score)
                 // For now, let's just remove the coin
                 i--;
