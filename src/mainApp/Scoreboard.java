@@ -2,12 +2,18 @@ package mainApp;
 
 public class Scoreboard {
 
-	public static void countCoins(){
-		
+	private Hero hero;
+	
+	public Scoreboard(Hero hero) {
+		this.hero = hero;
 	}
 	
-	public static void countlives(){
-		
+	public int countCoins(){
+		return this.hero.getCoinCount();
+	}
+	
+	public int countlives(){
+		return this.hero.getLives(); 
 	}
 	
 	public static void endGame(){
