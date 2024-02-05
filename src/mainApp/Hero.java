@@ -23,6 +23,7 @@ class Hero {
     public int getX() {
         return this.x;
     }
+    
 
     public int getY() {
         return this.y;
@@ -52,5 +53,53 @@ class Hero {
         if (y + height > GameComponent.HEIGHT) {
             y = GameComponent.HEIGHT - height;
         }
+    }
+    
+    public void moveDiagonallyForwardUp() {
+    	y -= speed;
+    	x += speed;
+    	if(y<0) {
+    		y=0;
+    	}
+    	if(x > 900){
+    		x=900;
+    	}
+    	
+    }
+    
+    public void moveDiagonallyForwardDown() {
+    	y+=speed;
+    	x+=speed;
+    	if (y + height > GameComponent.HEIGHT) {
+            y = GameComponent.HEIGHT - height;
+        }
+    	
+    	if(x>900) {
+    		x = 900;
+    	}
+    	
+    }
+    
+    public void moveDiagonallyBackDown() {
+    	y+=speed;
+    	x-=speed;
+    	if (y + height > GameComponent.HEIGHT) {
+            y = GameComponent.HEIGHT - height;
+        }
+    	
+    	if(x < 10 ) {
+    		x = 10;
+    	}
+    }
+    
+    public void moveDiagonallyBackUp() {
+    	y -= speed;
+    	x -= speed;
+    	if(y<0) {
+    		y=0;
+    	}
+    	if(x < 10){
+    		x=10;
+    	}
     }
 }

@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 
 public class MainApp {
     public static void main(String[] args) {
+<<<<<<< HEAD
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Game");
             GameComponent gameComponent = new GameComponent();
@@ -50,5 +51,18 @@ public class MainApp {
                 level.nextLevel();
             }
         });
+=======
+        JFrame frame = new JFrame("Game");
+        final int frameWidth = 1000;
+        final int frameHeight = 600;
+        frame.setSize(frameWidth, frameHeight);
+        GameComponent gameComponent = new GameComponent();
+        frame.add(gameComponent);
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        gameComponent.startGame();
+>>>>>>> branch 'master' of https://github.com/rhit-csse220/csse220-winter-2023-2024-final-project-w24_a401
     }
 }
