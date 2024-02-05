@@ -50,6 +50,7 @@ public class GameComponent extends JPanel {
 
     private boolean upKeyPressed;
     private Level currentLevel;
+    
 
     public GameComponent() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -66,30 +67,41 @@ public class GameComponent extends JPanel {
 
         timer = new Timer();
         upKeyPressed = false;
+        currentLevel = new Level();
 
         setFocusable(true);
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    upKeyPressed = true;
-                }
-//                if (e.getKeyChar() == 'U' || e.getKeyChar() == 'u') {
-//                	currentLevel.nextLevel();
-//                }
-//                if (e.getKeyChar() == 'D' || e.getKeyChar() == 'd') {
-//                	currentLevel.previousLevel();
-//                }
+                handleKeyPress(e);
             }
-           
 
             @Override
             public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    upKeyPressed = false;
-                }
+                handleKeyRelease(e);
             }
-        });}
+        });
+    }
+
+    private void handleKeyPress(KeyEvent e) {
+        System.out.println("Key Pressed: " + e.getKeyChar()); 
+        int keyCode = e.getKeyCode();
+        if (e.getKeyCode() == KeyEvent.VK_UP) {
+            upKeyPressed = true;
+        } else if (keyCode == KeyEvent.VK_U) {
+            switchToNextLevel();
+        } else if (keyCode == KeyEvent.VK_D) {
+            switchToPreviousLevel();
+        }
+    }
+    
+
+
+    private void handleKeyRelease(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_UP) {
+            upKeyPressed = false;
+        }
+    }
     
         
     public void addInitialComponents(List<GameComponent> initialComponents) {
@@ -111,12 +123,15 @@ public class GameComponent extends JPanel {
     }
 
     public void startGame() {
+        System.out.println("Starting game.");  // Add this line
+
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 update();
             }
         }, 0, 20);
+
         requestFocusInWindow();
     }
 
@@ -149,11 +164,11 @@ public class GameComponent extends JPanel {
         	missile.move();
         }
         
-        // Draw tracking missiles
+     // Draw tracking missiles
         g2d.setColor(Color.RED);
-        for (TrackingMissile trackingmissile: tmissiles) {
-        	g2d.fillRect(trackingmissile.getX(), trackingmissile.getY(), 30, 10);
-        	trackingmissile.moveMissile();
+        for (TrackingMissile trackingmissile : tmissiles) {
+            g2d.fillRect(trackingmissile.getX(), trackingmissile.getY(), 30, 10);
+            trackingmissile.moveMissile();
         }
         
         // Draw electrified barriers
@@ -167,10 +182,43 @@ public class GameComponent extends JPanel {
         g2d.setColor(Color.YELLOW);
         for (OscillatingCoin oscillatingcoin : ocoins) {
             g2d.fillOval(oscillatingcoin.getX(), oscillatingcoin.getY(), COIN_SIZE, COIN_SIZE);
+            oscillatingcoin.moveCoin();
         }
         
     }
 
+    private void switchToNextLevel() {
+        if (currentLevel != null && currentLevel.hasMoreLevels()) {
+            currentLevel.nextLevel();
+            System.out.println("Switched to level: " + currentLevel.getCurrentLevelIndex());
+            loadCurrentLevel();
+        }
+    }
+
+    private void switchToPreviousLevel() {
+        if (currentLevel != null && currentLevel.getCurrentLevelIndex() > 0) {
+            currentLevel.previousLevel();
+            loadCurrentLevel();
+        }
+    }
+
+    private void loadCurrentLevel() {
+        List<GameComponent> components = currentLevel.getLevelComponents();
+        clearGameComponents();
+        addInitialComponents(components);  // Add this line to add components from the new level
+        startGame();
+    }
+
+    private void clearGameComponents() {
+        walls.clear();
+        coins.clear();
+        missiles.clear();
+        tmissiles.clear();
+        ebarriers.clear();
+        ocoins.clear();
+    }
+    
+    
     private void update() {
         // Move hero
         if (upKeyPressed) {
@@ -184,6 +232,18 @@ public class GameComponent extends JPanel {
 
         // Move coins
         moveCoins();
+
+        // Move missiles
+        moveMissiles();
+
+        // Move tracking missiles
+        moveTrackingMissiles();
+
+        // Move electrified barriers
+        moveElectrifiedBarriers();
+
+        // Move oscillating coins
+        moveOscillatingCoins();
 
         // Check collisions
         checkCollisions();
@@ -221,6 +281,74 @@ public class GameComponent extends JPanel {
             coin.move();
             if (coin.getY() > HEIGHT) {
                 coins.remove(i);
+                i--;
+            }
+        }
+    }
+    
+    private void moveElectrifiedBarriers() {
+        Random rand = new Random();
+        if (rand.nextInt(100) < 5) {
+            int x = rand.nextInt(WIDTH - WALL_WIDTH);
+            ebarriers.add(new ElectrifiedBarrier(WALL_SPEED, getWidth(), getHeight()));
+        }
+
+        for (int i = 0; i < ebarriers.size(); i++) {
+            ElectrifiedBarrier electrifiedbarrier = ebarriers.get(i);
+            electrifiedbarrier.move();
+            if (electrifiedbarrier.getY() > HEIGHT) {
+                ebarriers.remove(i);
+                i--;
+            }
+        }
+    }
+
+    private void moveOscillatingCoins() {
+        Random rand = new Random();
+        if (rand.nextInt(100) < 5) {
+            int x = rand.nextInt(WIDTH - COIN_SIZE);
+            ocoins.add(new OscillatingCoin(getWidth(),getHeight()));
+        }
+
+        for (int i = 0; i < ocoins.size(); i++) {
+            OscillatingCoin oscillatingcoin = ocoins.get(i);
+            oscillatingcoin.move();
+            if (oscillatingcoin.getY() > HEIGHT) {
+                ocoins.remove(i);
+                i--;
+            }
+        }
+    }
+
+    private void moveMissiles() {
+        Random rand = new Random();
+        if (rand.nextInt(100) < 5) {
+            int x = rand.nextInt(WIDTH - WALL_WIDTH);
+            missiles.add(new Missile(getWidth(), getHeight()));
+        }
+
+        for (int i = 0; i < missiles.size(); i++) {
+            Missile missile = missiles.get(i);
+            missile.move();
+            if (missile.getY() > HEIGHT) {
+                missiles.remove(i);
+                i--;
+            }
+        }
+    }
+
+    private void moveTrackingMissiles() {
+        Random rand = new Random();
+        if (rand.nextInt(100) < 5) {
+            int x = rand.nextInt(WIDTH - WALL_WIDTH);
+            tmissiles.add(new TrackingMissile(getWidth(), getHeight(), hero));
+        }
+
+        for (int i = 0; i < tmissiles.size(); i++) {
+            TrackingMissile trackingmissile = tmissiles.get(i);
+            trackingmissile.move();
+            if (trackingmissile.getY() > HEIGHT) {
+                tmissiles.remove(i);
                 i--;
             }
         }

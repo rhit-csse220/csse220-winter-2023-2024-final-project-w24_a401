@@ -43,6 +43,8 @@ public class MainApp {
                 gameComponent.startGame();
 
                 // Wait for the level to finish
+                // For simplicity, you can add a flag in your GameComponent to indicate when the level is finished
+                // For example, add a boolean variable in GameComponent like: private boolean levelFinished;
 
                 // Move to the next level
                 level.nextLevel();

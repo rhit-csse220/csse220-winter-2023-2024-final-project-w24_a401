@@ -11,7 +11,7 @@ public class OscillatingCoin extends Coin {
 	}
 
 	public void moveCoin(){
-		if (this.y <= 0) {
+		if (this.y >= 0) {
 			this.y += 2;
 		}
 		

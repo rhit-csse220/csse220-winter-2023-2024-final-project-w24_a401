@@ -12,15 +12,23 @@ public class Level {
     private List<GameComponent> levelComponents = new ArrayList<>();
     int currentLevelIndex = 0;
     private List<String> levelFileNames = List.of("src/level1.txt", "src/level2.txt");
+	private Hero hero;
 
     public boolean hasMoreLevels() {
         return currentLevelIndex < levelFileNames.size();
     }
 
     public void loadNextLevel() {
+        System.out.println("Loading next level.");
         String filename = getLevelFileName();
-        readFile(filename);
+        try {
+            readFile(filename);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+    
+    
 
     public List<GameComponent> getLevelComponents() {
         return new ArrayList<>(levelComponents);
@@ -34,11 +42,15 @@ public class Level {
     }
 
     private void readFile(String fileName) {
+        System.out.println("Reading file: " + fileName);  // Add this line
+
         File levelFile = new File(fileName);
 
         try (Scanner scanner = new Scanner(levelFile)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+                System.out.println("Read from file: " + line);  // Add this line
+
                 String[] components = line.split(",");
                 if (components.length == 3) {
                     String type = components[0].trim();
@@ -51,39 +63,43 @@ public class Level {
             }
         } catch (FileNotFoundException | NumberFormatException e) {
             e.printStackTrace();
-        }
+        } catch (InvalidLevelFormatException e) {
+			e.printStackTrace();
+		}
     }
 
-    private GameComponent createGameComponent(String type, int x, int y) {
+    private GameComponent createGameComponent(String type, int x, int y) throws InvalidLevelFormatException {
         switch (type) {
             case "c":
-                return new Coin(1, x, y);
+                return new Coin(3, x, y);
             case "o":
                 return new OscillatingCoin(x, y);
             case "w":
-                return new Wall(1, x, y);
+                return new Wall(3, x, y);
             case "e":
-                return new ElectrifiedBarrier(1, x, y);
+                return new ElectrifiedBarrier(3, x, y);
             case "m":
                 return new Missile(x, y);
             case "t":
-                return new TrackingMissile(x, y);
+                return new TrackingMissile(x, y, hero);
             default:
-                throw new IllegalArgumentException("Invalid game component type: " + type);
+                throw new InvalidLevelFormatException("Invalid game component type: " + type);
         }
     }
 
     public void nextLevel() {
         currentLevelIndex++;
         levelComponents.clear();
+        System.out.println("Next Level Index: " + currentLevelIndex);  // Add this line
+    }
+
+    public void previousLevel() {
+        currentLevelIndex--;
+        levelComponents.clear();
+        System.out.println("Previous Level Index: " + currentLevelIndex);  // Add this line
     }
 
 	public int getCurrentLevelIndex() {
 		return this.currentLevelIndex;
-	}
-
-	public void previousLevel() {
-        currentLevelIndex--;
-        levelComponents.clear();
 	}
 }
