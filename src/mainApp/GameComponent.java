@@ -31,12 +31,14 @@ class GameComponent extends JPanel {
     private Timer timer;
 
     private boolean upKeyPressed;
+    private boolean diagonalForwardKeyPressed;
+    private boolean diagonalDownKeyPressed;
 
     public GameComponent() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.WHITE);
 
-        hero = new Hero(WIDTH / 2 - HERO_WIDTH / 2, HEIGHT - HERO_HEIGHT - 20, 20, 20);
+        hero = new Hero(10, HEIGHT - HERO_HEIGHT - 20, 3, 51);
 
         walls = new ArrayList<>();
         coins = new ArrayList<>();
@@ -50,6 +52,10 @@ class GameComponent extends JPanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
                     upKeyPressed = true;
+                }else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                	diagonalForwardKeyPressed = true;
+                }else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                	diagonalDownKeyPressed = true;
                 }
             }
 
@@ -57,8 +63,14 @@ class GameComponent extends JPanel {
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
                     upKeyPressed = false;
+                }else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                	diagonalForwardKeyPressed = false;
+                }else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                	diagonalDownKeyPressed = false;
                 }
             }
+            
+            
         });
     }
 
@@ -84,7 +96,7 @@ class GameComponent extends JPanel {
         // Draw walls
         g2d.setColor(Color.RED);
         for (Wall wall : walls) {
-            g2d.fillRect(wall.getX(), wall.getY(), WALL_WIDTH, HEIGHT - wall.getY());
+            g2d.fillRect(wall.getX(), wall.getY(), WALL_WIDTH, 20);
         }
 
         // Draw coins
@@ -100,6 +112,20 @@ class GameComponent extends JPanel {
             hero.moveUp();
         } else {
             hero.moveDown();
+        }
+        
+        if(diagonalForwardKeyPressed) {
+        	hero.moveDiagonallyForwardDown();
+        }
+        if(diagonalForwardKeyPressed && upKeyPressed) {
+        	hero.moveDiagonallyForwardUp();
+        }
+        if(diagonalDownKeyPressed) {
+        	hero.moveDiagonallyBackDown();
+        }
+        
+        if(diagonalDownKeyPressed && upKeyPressed) {
+        	hero.moveDiagonallyBackUp();
         }
 
         // Move walls
@@ -119,7 +145,7 @@ class GameComponent extends JPanel {
         Random rand = new Random();
         if (rand.nextInt(100) < 5) {
             int x = rand.nextInt(WIDTH - WALL_WIDTH);
-            walls.add(new Wall(WALL_SPEED, x, x));
+            walls.add(new Wall(WALL_SPEED, getWidth(), getHeight()));
         }
 
         for (int i = 0; i < walls.size(); i++) {
@@ -154,12 +180,13 @@ class GameComponent extends JPanel {
 
         // Check collisions with walls
         for (Wall wall : walls) {
-            Rectangle wallRect = new Rectangle(wall.getX(), wall.getY(), WALL_WIDTH, HEIGHT - wall.getY());
+            Rectangle wallRect = new Rectangle(wall.getX(), wall.getY(), WALL_WIDTH, 20);
             if (heroRect.intersects(wallRect)) {
    
+            	System.out.println("Collides");
             	
-                // Handle collision with wall
-                // For now, let's just stop the game
+                // handle collision with wall
+                // stops game right now but will later implement lose life method
                 timer.cancel();
             }
         }

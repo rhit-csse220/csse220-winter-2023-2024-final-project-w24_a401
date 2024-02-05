@@ -33,6 +33,9 @@ import java.util.TimerTask;
 public class MainApp {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Game");
+        final int frameWidth = 1000;
+        final int frameHeight = 600;
+        frame.setSize(frameWidth, frameHeight);
         GameComponent gameComponent = new GameComponent();
         frame.add(gameComponent);
         frame.pack();

@@ -9,14 +9,13 @@
 //	private int y;
 //	
 //    public ElectrifiedBarrier(int x, int y) {
-//    	super(x,y);
+//    	super();
 //    }
 //	
 //	public static void loseLife(){
 //		
 //	}
 //	
-//    @Override
 //    public void render(Graphics2D g2d) {
 //        // Implement rendering logic for Coin
 //        g2d.setColor(Color.BLUE);
