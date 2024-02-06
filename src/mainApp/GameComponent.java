@@ -32,6 +32,7 @@ public class GameComponent extends JPanel {
     protected static final int COIN_SPEED = 3;
 
     private Hero hero;
+    protected Scoreboard scoreboard;
     
     private CopyOnWriteArrayList<Wall> walls = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Coin> coins = new CopyOnWriteArrayList<>();
@@ -65,7 +66,7 @@ public class GameComponent extends JPanel {
 //        ocoins = new ArrayList<>();
 
         hero = new Hero(10, HEIGHT - HERO_HEIGHT - 20, 3, 51);
-
+        scoreboard = new Scoreboard(hero);
 
         timer = new Timer();
         upKeyPressed = false;
@@ -416,7 +417,7 @@ public class GameComponent extends JPanel {
             Rectangle coinRect = new Rectangle(coin.getX(), coin.getY(), COIN_SIZE, COIN_SIZE);
             if (heroRect.intersects(coinRect)) {
                 coins.remove(i);
-                hero.addCoin();
+                scoreboard.addCoin();
                 // Handle collision with coin (e.g., increase score)
                 // For now, let's just remove the coin
                 i--;

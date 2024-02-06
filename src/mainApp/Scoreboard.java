@@ -11,12 +11,17 @@ public class Scoreboard {
 	
 	//add coins collected to permanent score (should happen at end of level)
 	public void commitCoins() {
-		committedCoins += this.hero.getCoinCount();
+		this.committedCoins += this.hero.getCoinCount();
 	}
 	
 	//return count of TOTAL CURRENT COINS, committed + non committed
 	public int countCoins(){
 		return this.committedCoins + this.hero.getCoinCount();
+	}
+	
+	//add coin
+	public void addCoin() {
+		this.committedCoins++;
 	}
 	
 	//return count of current lives
