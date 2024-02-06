@@ -32,7 +32,6 @@ public class GameComponent extends JPanel {
     protected static final int COIN_SPEED = 3;
 
     private Hero hero;
-    protected Scoreboard scoreboard;
     
     private CopyOnWriteArrayList<Wall> walls = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Coin> coins = new CopyOnWriteArrayList<>();
@@ -41,7 +40,7 @@ public class GameComponent extends JPanel {
     private CopyOnWriteArrayList<ElectrifiedBarrier> ebarriers = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<OscillatingCoin> ocoins = new CopyOnWriteArrayList<>();
     
-    public Timer timer;
+    private Timer timer;
 
     private boolean upKeyPressed;
 
@@ -66,7 +65,7 @@ public class GameComponent extends JPanel {
 //        ocoins = new ArrayList<>();
 
         hero = new Hero(10, HEIGHT - HERO_HEIGHT - 20, 3, 51);
-        scoreboard = new Scoreboard(hero);
+
 
         timer = new Timer();
         upKeyPressed = false;
@@ -423,5 +422,48 @@ public class GameComponent extends JPanel {
                 i--;
             }
         }
+        
+        // Check collisions with oscillating coins
+        for (int i = 0; i < ocoins.size(); i++) {
+            OscillatingCoin oscillatingcoin = ocoins.get(i);
+            Rectangle ocoinRect = new Rectangle(oscillatingcoin.getX(), oscillatingcoin.getY(), COIN_SIZE, COIN_SIZE);
+            if (heroRect.intersects(ocoinRect)) {
+                ocoins.remove(i);
+                hero.addCoin();
+                // Handle collision with coin (e.g., increase score)
+                // For now, let's just remove the coin
+                i--;
+            }
+        }
+        
+        for (int i = 0; i < ebarriers.size(); i++) {
+            ElectrifiedBarrier electrifiedbarrier = ebarriers.get(i);
+            Rectangle ebarrierRect = new Rectangle(electrifiedbarrier.getX(), electrifiedbarrier.getY(), 30, 10);
+            if (heroRect.intersects(ebarrierRect)) {
+                ebarriers.remove(i);
+                hero.loseLife();
+                i--;
+            }
+        }
+        
+        for (int i = 0; i < missiles.size(); i++) {
+            Missile missile = missiles.get(i);
+            Rectangle missileRect = new Rectangle(missile.getX(), missile.getY(), WALL_WIDTH, 10);
+            if (heroRect.intersects(missileRect)) {
+                missiles.remove(i);
+                hero.loseLife();
+                i--;
+            }
+        }
+        
+        for (int i = 0; i < tmissiles.size(); i++) {
+            TrackingMissile trackingmissile = tmissiles.get(i);
+            Rectangle tmissileRect = new Rectangle(trackingmissile.getX(), trackingmissile.getY(), 30, 10);
+            if (heroRect.intersects(tmissileRect)) {
+                tmissiles.remove(i);
+                hero.loseLife();
+                i--;
+            }
+        }   
     }
 }
