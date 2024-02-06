@@ -165,6 +165,10 @@ public class GameComponent extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
+        // Draw scoreboard
+        g2d.drawString("Lives: "+hero.getLives(), 20, 20);
+        g2d.drawString("Coins: "+hero.getCoinCount(), 80, 20);
+        
         // Draw hero
         g2d.setColor(Color.BLUE);
         g2d.fillRect(hero.getX(), hero.getY(), HERO_WIDTH, HERO_HEIGHT);
