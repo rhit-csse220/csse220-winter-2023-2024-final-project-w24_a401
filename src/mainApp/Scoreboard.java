@@ -1,6 +1,6 @@
 package mainApp;
 
-public class Scoreboard {
+public class Scoreboard extends GameComponent{
 
 	private Hero hero;
 	private int committedCoins;
@@ -10,23 +10,9 @@ public class Scoreboard {
 		this.hero = hero;
 	}
 	
-	//add coins collected to permanent score (should happen at end of level)
-	public void commitCoins() {
-		this.committedCoins += this.hero.getCoinCount();
-	}
-	
 	//return count of TOTAL CURRENT COINS, committed + non committed
 	public int countCoins(){
-		return this.committedCoins + this.hero.getCoinCount();
-	}
-	
-	public void loseLife() {
-		this.lives--;
-	}
-	
-	//add coin
-	public void addCoin() {
-		this.committedCoins++;
+		return this.hero.getCoinCount();
 	}
 	
 	//return count of current lives

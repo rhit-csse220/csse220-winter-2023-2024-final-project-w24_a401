@@ -36,7 +36,15 @@ class Hero {
     	return this.coinCount;
     }
     
-    
+    public void loseLife() {
+		this.lives--;
+	}
+	
+	//add coin
+	public void addCoin() {
+		this.coinCount++;
+	}
+	
 
     public void moveUp() {
         y -= speed;

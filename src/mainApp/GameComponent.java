@@ -41,7 +41,7 @@ public class GameComponent extends JPanel {
     private CopyOnWriteArrayList<ElectrifiedBarrier> ebarriers = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<OscillatingCoin> ocoins = new CopyOnWriteArrayList<>();
     
-    private Timer timer;
+    public Timer timer;
 
     private boolean upKeyPressed;
 
@@ -417,7 +417,7 @@ public class GameComponent extends JPanel {
             Rectangle coinRect = new Rectangle(coin.getX(), coin.getY(), COIN_SIZE, COIN_SIZE);
             if (heroRect.intersects(coinRect)) {
                 coins.remove(i);
-                scoreboard.addCoin();
+                hero.addCoin();
                 // Handle collision with coin (e.g., increase score)
                 // For now, let's just remove the coin
                 i--;
