@@ -21,7 +21,7 @@ public class Scoreboard {
 	
 	//return count of current lives
 	public int countlives(Hero hero){
-		return hero.getLives(); 
+		return this.hero.getLives(); 
 	}
 	
 	public static void endGame(){
