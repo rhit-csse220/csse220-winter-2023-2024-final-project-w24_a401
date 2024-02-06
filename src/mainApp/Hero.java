@@ -18,6 +18,7 @@ class Hero {
         this.y = y;
         this.speed = speed;
         this.height = height;
+        this.lives = 3;
     }
 
     public int getX() {
