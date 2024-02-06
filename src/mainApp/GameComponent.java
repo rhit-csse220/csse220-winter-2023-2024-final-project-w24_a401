@@ -250,7 +250,12 @@ public class GameComponent extends JPanel {
     
     
     private void update() {
-        // Move hero
+        
+    	if(hero.getLives()==0) {
+    		timer.cancel();
+    	}
+    	
+    	// Move hero
         if (upKeyPressed) {
             hero.moveUp();
         } else {
