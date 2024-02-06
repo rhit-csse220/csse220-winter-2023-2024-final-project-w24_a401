@@ -4,6 +4,7 @@ public class Scoreboard {
 
 	private Hero hero;
 	private int committedCoins;
+	private int lives;
 	
 	public Scoreboard(Hero hero) {
 		this.hero = hero;
@@ -17,6 +18,10 @@ public class Scoreboard {
 	//return count of TOTAL CURRENT COINS, committed + non committed
 	public int countCoins(){
 		return this.committedCoins + this.hero.getCoinCount();
+	}
+	
+	public void loseLife() {
+		this.lives--;
 	}
 	
 	//add coin
