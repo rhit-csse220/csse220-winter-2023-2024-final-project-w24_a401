@@ -34,4 +34,5 @@ class Wall extends GameComponent {
             x = screenWidth; // Wrap to the right side
         }
     }
+    
 }

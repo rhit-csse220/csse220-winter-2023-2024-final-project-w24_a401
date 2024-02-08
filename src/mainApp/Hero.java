@@ -109,6 +109,9 @@ class Hero {
 		}
 		
 	}
+	public void setXPosition(int x) {
+    	this.x = x;
+    }
 		
 	}
     

@@ -413,9 +413,14 @@ public class GameComponent extends JPanel {
    
             	System.out.println("Collides");
             	
+            	
+            	
                 // handle collision with wall
                 // stops game right now but will later implement lose life method
-                timer.cancel();
+            	
+            	hero.setXPosition(wall.getX());
+            	
+//                timer.cancel();
             }
         }
 
