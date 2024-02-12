@@ -10,10 +10,11 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
+import javax.swing.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
-
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 import javax.swing.JPanel;
 
 public class GameComponent extends JPanel {
@@ -27,10 +28,13 @@ public class GameComponent extends JPanel {
     protected static final int HERO_HEIGHT = 50;
     protected static final int WALL_WIDTH = 20;
     protected static final int COIN_SIZE = 20;
+    protected static final int HEALPICKUP_SIZE = 15;
     protected static final int HERO_SPEED = 3;
     protected static final int WALL_SPEED = 3;
     protected static final int COIN_SPEED = 3;
-
+    protected static final int HEALPICKUP_SPEED = 3;
+    
+    
     private Hero hero;
     
     private CopyOnWriteArrayList<Wall> walls = new CopyOnWriteArrayList<>();
@@ -39,6 +43,7 @@ public class GameComponent extends JPanel {
     private CopyOnWriteArrayList<TrackingMissile> tmissiles = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<ElectrifiedBarrier> ebarriers = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<OscillatingCoin> ocoins = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<HealPickup> healPickups = new CopyOnWriteArrayList<>();
     
     private Timer timer;
 
@@ -48,7 +53,9 @@ public class GameComponent extends JPanel {
     
     private boolean diagonalForwardKeyPressed;
     private boolean diagonalDownKeyPressed;
-
+    
+    protected boolean levelWon = false;
+    private boolean gameOver = false;
 
     public GameComponent() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -56,7 +63,7 @@ public class GameComponent extends JPanel {
 
 
         hero = new Hero(10, HEIGHT - HERO_HEIGHT, HERO_SPEED, 51);
-        
+
 //        walls = new ArrayList<>();
 //        coins = new ArrayList<>();
 //        missiles = new ArrayList<>();
@@ -64,10 +71,10 @@ public class GameComponent extends JPanel {
 //        ebarriers = new ArrayList<>();
 //        ocoins = new ArrayList<>();
 
-        hero = new Hero(10, HEIGHT - HERO_HEIGHT - 20, 3, 51);
+        //hero = new Hero(10, HEIGHT - HERO_HEIGHT - 20, 3, 51);
 
-
-        timer = new Timer();
+        
+        timer = new Timer(10, new timerListener(this));
         upKeyPressed = false;
         currentLevel = new Level();
 
@@ -77,7 +84,7 @@ public class GameComponent extends JPanel {
             public void keyPressed(KeyEvent e) {
 
                 handleKeyPress(e);
-
+ 
 
                 handleKeyPress(e);
 
@@ -109,7 +116,7 @@ public class GameComponent extends JPanel {
     }
 
     private void handleKeyPress(KeyEvent e) {
-        System.out.println("Key Pressed: " + e.getKeyChar()); 
+        //System.out.println("Key Pressed: " + e.getKeyChar()); 
         int keyCode = e.getKeyCode();
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             upKeyPressed = true;
@@ -143,19 +150,16 @@ public class GameComponent extends JPanel {
                 ebarriers.add((ElectrifiedBarrier) component);
             } else if (component instanceof OscillatingCoin) {
                 ocoins.add((OscillatingCoin) component);
+            } else if (component instanceof HealPickup) {
+            	healPickups.add((HealPickup) component);
             }
         }
     }
 
     public void startGame() {
-        System.out.println("Starting game.");  // Add this line
+        //System.out.println("Starting game.");  // Add this line
 
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                update();
-            }
-        }, 0, 20);
+        timer.start();
 
         requestFocusInWindow();
     }
@@ -164,7 +168,7 @@ public class GameComponent extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-
+        
         // Draw scoreboard
         g2d.drawString("Lives: "+hero.getLives(), 20, 20);
         g2d.drawString("Coins: "+hero.getCoinCount(), 80, 20);
@@ -215,12 +219,27 @@ public class GameComponent extends JPanel {
             oscillatingcoin.moveCoin();
         }
         
+     // Draw heal pickups
+        g2d.setColor(Color.PINK);
+        for (HealPickup healPickup : healPickups) {
+            g2d.fillOval(healPickup.getX(), healPickup.getY(), COIN_SIZE, COIN_SIZE);
+            healPickup.move();
+        }
+        
+     // Draw game over screen
+        if(gameOver == true) {
+        	g2d.setColor(Color.RED);
+        	g2d.fillRect(0, 0, 800, 600);
+        	g2d.setColor(Color.BLACK);
+        	g2d.drawString("Game over", 350, 300);
+        }
+        
     }
 
     private void switchToNextLevel() {
         if (currentLevel != null && currentLevel.hasMoreLevels()) {
             currentLevel.nextLevel();
-            System.out.println("Switched to level: " + currentLevel.getCurrentLevelIndex());
+            //System.out.println("Switched to level: " + currentLevel.getCurrentLevelIndex());
             loadCurrentLevel();
         }
     }
@@ -233,6 +252,9 @@ public class GameComponent extends JPanel {
     }
 
     private void loadCurrentLevel() {
+    	this.hero.setXPosition(10);	
+    	this.hero.setYPosition(HEIGHT - HERO_HEIGHT);
+    	levelWon = false;
         List<GameComponent> components = currentLevel.getLevelComponents();
         clearGameComponents();
         addInitialComponents(components);  // Add this line to add components from the new level
@@ -246,13 +268,15 @@ public class GameComponent extends JPanel {
         tmissiles.clear();
         ebarriers.clear();
         ocoins.clear();
+        healPickups.clear();
     }
     
     
-    private void update() {
+    protected void update() {
         
     	if(hero.getLives()==0) {
-    		timer.cancel();
+    		gameOver = true;
+    		timer.stop();
     	}
     	
     	// Move hero
@@ -293,6 +317,9 @@ public class GameComponent extends JPanel {
 
         // Move oscillating coins
         moveOscillatingCoins();
+        
+        // Move heal pickups
+        moveHealPickups();
 
         // Check collisions
         checkCollisions();
@@ -317,6 +344,8 @@ public class GameComponent extends JPanel {
             }
         }
     }
+    
+    
 
     private void moveCoins() {
         Random rand = new Random();
@@ -368,6 +397,23 @@ public class GameComponent extends JPanel {
             }
         }
     }
+    
+    private void moveHealPickups() {
+        Random rand = new Random();
+        if (rand.nextInt(100) < 5) {
+            int x = rand.nextInt(WIDTH - HEALPICKUP_SIZE);
+            healPickups.add(new HealPickup(HEALPICKUP_SPEED,getWidth(),getHeight()));
+        }
+
+        for (int i = 0; i < healPickups.size(); i++) {
+            HealPickup healPickup = healPickups.get(i);
+            healPickup.move();
+            if (healPickup.getY() > HEIGHT) {
+                healPickups.remove(i);
+                i--;
+            }
+        }
+    }
 
     private void moveMissiles() {
         Random rand = new Random();
@@ -403,15 +449,43 @@ public class GameComponent extends JPanel {
         }
     }
 
+    
+    
     private void checkCollisions() {
         Rectangle heroRect = new Rectangle(hero.getX(), hero.getY(), HERO_WIDTH, HERO_HEIGHT);
-
+        Scanner scanner = new Scanner(System.in);
+        //System.out.println(heroRect.getX());
+        if(heroRect.getX()>=750) {
+        	System.out.println("won a level!");
+        	levelWon = true;
+        	if (currentLevel.hasMoreLevels()) {
+        		switchToNextLevel();
+        	} else {	
+        		System.out.println("replay? (y/n) ");
+        		timer.stop();
+        		
+        		String response = scanner.nextLine();
+        		
+        		if(response.equals("y")) {
+        			while(currentLevel.getCurrentLevelIndex() > 0) {
+        				switchToPreviousLevel();
+        				
+        			}
+        			
+        		} else {
+        			System.out.println("Thanks for playing!");
+        			timer.stop();
+        		}
+        	}
+        	
+        	
+        }
         // Check collisions with walls
         for (Wall wall : walls) {
             Rectangle wallRect = new Rectangle(wall.getX(), wall.getY(), WALL_WIDTH, 10);
             if (heroRect.intersects(wallRect)) {
    
-            	System.out.println("Collides");
+            	//System.out.println("Collides");
             	
             	
             	
@@ -444,8 +518,17 @@ public class GameComponent extends JPanel {
             if (heroRect.intersects(ocoinRect)) {
                 ocoins.remove(i);
                 hero.addCoin();
-                // Handle collision with coin (e.g., increase score)
-                // For now, let's just remove the coin
+                i--;
+            }
+        }
+        
+        // Check collisions with heal pickups
+        for (int i = 0; i < healPickups.size(); i++) {
+            HealPickup healPickup = healPickups.get(i);
+            Rectangle healPickupRect = new Rectangle(healPickup.getX(), healPickup.getY(), HEALPICKUP_SIZE, HEALPICKUP_SIZE);
+            if (heroRect.intersects(healPickupRect)) {
+                healPickups.remove(i);
+                hero.addLife();
                 i--;
             }
         }
