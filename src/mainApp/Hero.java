@@ -46,6 +46,11 @@ class Hero {
 		this.coinCount++;
 	}
 	
+	//add life
+	public void addLife() {
+		this.lives++;
+	}
+	
 
     public void moveUp() {
         y -= speed;
@@ -112,6 +117,9 @@ class Hero {
 	public void setXPosition(int x) {
     	this.x = x;
     }
+	public void setYPosition(int y) {
+		this.y = y;
+	}
 		
 	}
     

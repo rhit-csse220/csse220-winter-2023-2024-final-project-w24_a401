@@ -74,6 +74,8 @@ public class Level {
                 return new Coin(3, x, y);
             case "o":
                 return new OscillatingCoin(x, y);
+            case "h":
+            	return new HealPickup(3, x, y);
             case "w":
                 return new Wall(3, x, y);
             case "e":

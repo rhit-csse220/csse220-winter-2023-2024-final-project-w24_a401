@@ -50,7 +50,7 @@ public class MainApp {
                 level.nextLevel();
             }
         });
-
+        
         JFrame frame = new JFrame("Game");
         final int frameWidth = 1000;
         final int frameHeight = 600;
