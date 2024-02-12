@@ -19,7 +19,7 @@ public class Level {
     }
 
     public void loadNextLevel() {
-        System.out.println("Loading next level.");
+        //System.out.println("Loading next level.");
         String filename = getLevelFileName();
         try {
             readFile(filename);
@@ -42,14 +42,14 @@ public class Level {
     }
 
     private void readFile(String fileName) {
-        System.out.println("Reading file: " + fileName);  // Add this line
+        //System.out.println("Reading file: " + fileName);  // Add this line
 
         File levelFile = new File(fileName);
 
         try (Scanner scanner = new Scanner(levelFile)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                System.out.println("Read from file: " + line);  // Add this line
+                //System.out.println("Read from file: " + line);  // Add this line
 
                 String[] components = line.split(",");
                 if (components.length == 3) {
@@ -92,13 +92,13 @@ public class Level {
     public void nextLevel() {
         currentLevelIndex++;
         levelComponents.clear();
-        System.out.println("Next Level Index: " + currentLevelIndex);  // Add this line
+        //System.out.println("Next Level!");  // Add this line
     }
 
     public void previousLevel() {
         currentLevelIndex--;
         levelComponents.clear();
-        System.out.println("Previous Level Index: " + currentLevelIndex);  // Add this line
+        //System.out.println("Previous Level Index");  // Add this line
     }
 
 	public int getCurrentLevelIndex() {

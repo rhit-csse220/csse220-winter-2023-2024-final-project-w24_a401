@@ -14,7 +14,7 @@ import javax.swing.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Scanner;
-
+import java.util.concurrent.TimeUnit;
 import javax.swing.JPanel;
 
 public class GameComponent extends JPanel {
@@ -55,6 +55,7 @@ public class GameComponent extends JPanel {
     private boolean diagonalDownKeyPressed;
     
     protected boolean levelWon = false;
+    private boolean gameOver = false;
 
     public GameComponent() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -156,7 +157,7 @@ public class GameComponent extends JPanel {
     }
 
     public void startGame() {
-        System.out.println("Starting game.");  // Add this line
+        //System.out.println("Starting game.");  // Add this line
 
         timer.start();
 
@@ -167,7 +168,7 @@ public class GameComponent extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-
+        
         // Draw scoreboard
         g2d.drawString("Lives: "+hero.getLives(), 20, 20);
         g2d.drawString("Coins: "+hero.getCoinCount(), 80, 20);
@@ -225,12 +226,20 @@ public class GameComponent extends JPanel {
             healPickup.move();
         }
         
+     // Draw game over screen
+        if(gameOver == true) {
+        	g2d.setColor(Color.RED);
+        	g2d.fillRect(0, 0, 800, 600);
+        	g2d.setColor(Color.BLACK);
+        	g2d.drawString("Game over", 350, 300);
+        }
+        
     }
 
     private void switchToNextLevel() {
         if (currentLevel != null && currentLevel.hasMoreLevels()) {
             currentLevel.nextLevel();
-            System.out.println("Switched to level: " + currentLevel.getCurrentLevelIndex());
+            //System.out.println("Switched to level: " + currentLevel.getCurrentLevelIndex());
             loadCurrentLevel();
         }
     }
@@ -266,6 +275,7 @@ public class GameComponent extends JPanel {
     protected void update() {
         
     	if(hero.getLives()==0) {
+    		gameOver = true;
     		timer.stop();
     	}
     	
