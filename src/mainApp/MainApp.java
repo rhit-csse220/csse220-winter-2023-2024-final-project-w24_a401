@@ -1,7 +1,11 @@
 package mainApp;
 
+import java.io.File;
 import java.util.List;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -17,6 +21,9 @@ import javax.swing.SwingUtilities;
 public class MainApp {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+        	
+        	playMusic();
+        	
             JFrame frame = new JFrame("Game");
             GameComponent gameComponent = new GameComponent();
             frame.add(gameComponent);
@@ -62,5 +69,19 @@ public class MainApp {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         gameComponent.startGame();
+    }
+    private static void playMusic() {
+    	try {
+    		
+    		File musicFile = new File("src/FinalProjectMusic.wav");
+    		AudioInputStream audio = AudioSystem.getAudioInputStream(musicFile);
+    		
+    		Clip clip = AudioSystem.getClip();
+    		
+    		clip.open(audio);
+    		clip.loop(Clip.LOOP_CONTINUOUSLY);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
     }
 }
