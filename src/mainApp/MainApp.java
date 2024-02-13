@@ -5,6 +5,14 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import java.awt.BorderLayout;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 
 /**
  * Class: MainApp
@@ -23,6 +31,7 @@ public class MainApp {
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLocationRelativeTo(null);
+            frame.setResizable(false);
             frame.setVisible(true);
 
             // Create and use the Level class
@@ -51,16 +60,26 @@ public class MainApp {
             }
         });
         
-        JFrame frame = new JFrame("Game");
-        final int frameWidth = 1000;
-        final int frameHeight = 600;
-        frame.setSize(frameWidth, frameHeight);
-        GameComponent gameComponent = new GameComponent();
-        frame.add(gameComponent);
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        gameComponent.startGame();
+//        JFrame frame = new JFrame("Game");
+//        final int frameWidth = 1000;
+//        final int frameHeight = 600;
+//        frame.setSize(frameWidth, frameHeight);
+////        JLabel contentPane = new JLabel();
+////        try {
+////			contentPane.setIcon( new ImageIcon(ImageIO.read(new File("src/mainApp/backgroundImage.png"))) );
+////		} catch (IOException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
+////        contentPane.setLayout( new BorderLayout() );
+//        //frame.setContentPane( contentPane );
+//        GameComponent gameComponent = new GameComponent();
+////        gameComponent.add(contentPane);
+//        frame.add(gameComponent); //problem child
+//        frame.pack();
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setLocationRelativeTo(null);
+//        frame.setVisible(true);
+//        gameComponent.startGame();
     }
 }
